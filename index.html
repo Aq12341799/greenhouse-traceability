@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Greenhouse Crop Traceability</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .field {
+      margin: 10px 0;
+    }
+    .label {
+      font-weight: bold;
+    }
+  </style>
+  <script src="crop_data.js"></script>
+</head>
+<body>
+<div class="container">
+  <h2>Crop Traceability Info</h2>
+  <div id="output">Loading data...</div>
+</div>
+
+<script>
+  window.addEventListener('load', function () {
+    const output = document.getElementById('output');
+    if (typeof cropData !== 'undefined') {
+      output.innerHTML = `
+        <div class="field"><span class="label">Batch ID:</span> ${cropData.batchId}</div>
+        <div class="field"><span class="label">Crop Type:</span> ${cropData.cropType}</div>
+        <div class="field"><span class="label">Planted Date:</span> ${cropData.plantedDate}</div>
+        <div class="field"><span class="label">Harvest Date:</span> ${cropData.harvestDate}</div>
+        <div class="field"><span class="label">Planting Environment:</span> Temperature: ${cropData.plantingEnvironment.temperatureC}°C, Humidity: ${cropData.plantingEnvironment.humidityPercent}%, pH: ${cropData.plantingEnvironment.phLevel}, EC: ${cropData.plantingEnvironment.ecLevel}, Light: ${cropData.plantingEnvironment.lightLux} lux</div>
+        <div class="field"><span class="label">Harvest Environment:</span> Temperature: ${cropData.harvestEnvironment.temperatureC}°C, Humidity: ${cropData.harvestEnvironment.humidityPercent}%, pH: ${cropData.harvestEnvironment.phLevel}, EC: ${cropData.harvestEnvironment.ecLevel}, Light: ${cropData.harvestEnvironment.lightLux} lux</div>
+        <div class="field"><span class="label">Harvest Quality:</span> Leaf Color: ${cropData.harvestQuality.leafColor}, Leaf Size: ${cropData.harvestQuality.leafSize}, Weight: ${cropData.harvestQuality.weightGrams} grams, Crispiness Score: ${cropData.harvestQuality.crispinessScore}, Moisture Content: ${cropData.harvestQuality.moistureContentPercent}%</div>
+      `;
+    } else {
+      output.innerHTML = "<span style='color:red;'>Crop data not found.</span>";
+    }
+  });
+</script>
+</body>
+</html>
