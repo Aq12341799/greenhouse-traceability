@@ -25,7 +25,6 @@
       font-weight: bold;
     }
   </style>
-  <script src="crop_data.js"></script>
 </head>
 <body>
 <div class="container">
@@ -33,6 +32,10 @@
   <div id="output"></div>
 </div>
 
+<!-- ✅ Load crop data first -->
+<script src="crop_data.js"></script>
+
+<!-- ✅ Then render it -->
 <script>
   const output = document.getElementById('output');
   if (typeof cropData !== 'undefined') {
