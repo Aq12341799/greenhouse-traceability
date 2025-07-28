@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Greenhouse Crop Traceability</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .field {
+      margin: 10px 0;
+    }
+    .label {
+      font-weight: bold;
+    }
+    #loadButton {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h2>Crop Traceability Info</h2>
+    <p>Enter URL of JSON crop batch data:</p>
+    <input type="text" id="jsonUrl" style="width:100%; padding: 10px;" placeholder="lettuce_traceability_LETT-2024-0701.json">
+    <button id="loadButton">Load Data</button>
+  </div>
+  <div id="output"></div>
+</div>
+
+<script>
+  document.getElementById('loadButton').onclick = async () => {
+    const url = document.getElementById('jsonUrl').value;
+    const output = document.getElementById('output');
+    output.innerHTML = 'Loading...';
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Could not fetch data.');
+      const data = await response.json();
+      output.innerHTML = `
+        <div class="field"><span class="label">Batch ID:</span> ${data.batchId}</div>
+        <div class="field"><span class="label">Crop Type:</span> ${data.cropType}</div>
+        <div class="field"><span class="label">Planted Date:</span> ${data.plantedDate}</div>
+        <div class="field"><span class="label">Expected Harvest:</span> ${data.harvestDate}</div>
+        <div class="field"><span class="label">Planting Environment:</span> Temperature: ${data.plantingEnvironment.temperatureC}°C, Humidity: ${data.plantingEnvironment.humidityPercent}%, pH: ${data.plantingEnvironment.phLevel}, EC: ${data.plantingEnvironment.ecLevel}, Light: ${data.plantingEnvironment.lightLux} lux</div>
+        <div class="field"><span class="label">Harvest Environment:</span> Temperature: ${data.harvestEnvironment.temperatureC}°C, Humidity: ${data.harvestEnvironment.humidityPercent}%, pH: ${data.harvestEnvironment.phLevel}, EC: ${data.harvestEnvironment.ecLevel}, Light: ${data.harvestEnvironment.lightLux} lux</div>
+        <div class="field"><span class="label">Harvest Quality:</span> Leaf Color: ${data.harvestQuality.leafColor}, Leaf Size: ${data.harvestQuality.leafSize}, Weight: ${data.harvestQuality.weightGrams} grams, Crispiness Score: ${data.harvestQuality.crispinessScore}, Moisture Content: ${data.harvestQuality.moistureContentPercent}%</div>
+      `;
+    } catch (err) {
+      output.innerHTML = '<span style="color:red">Error loading data.</span>';
+    }
+  };
+</script>
+</body>
+</html>
